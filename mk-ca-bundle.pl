@@ -182,8 +182,12 @@ while (<TXT>) {
     if ($untrusted) {
       $skipnum ++;
     } else {
+
+      my $encoded = MIME::Base64::encode_base64($data, '');
+      $encoded =~ s/(.{1,64})/$1\n/g;
+
       my $pem = "-----BEGIN CERTIFICATE-----\n"
-              . MIME::Base64::encode($data)
+              . $encoded
               . "-----END CERTIFICATE-----\n";
       print CRT "\n$caname\n";
       print CRT ("=" x length($caname) . "\n");
